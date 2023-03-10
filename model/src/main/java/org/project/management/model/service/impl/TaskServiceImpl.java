@@ -31,12 +31,13 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow();
     }
 
+    // todo add custom exception and handler
     @Override
     public Task updateTask(Long id, Task task) {
         Task taskToUpdate = taskRepository.findById(id)
                 .orElseThrow();
 
-        Task updatedTask = taskToUpdate.updateAttributes(task);
+        Task updatedTask = taskToUpdate.updateParameters(task);
 
         return taskRepository.save(updatedTask);
     }
@@ -57,8 +58,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Employee> getTopFiveEmployeesByCompletedTasks() {
-        List<Long> topFiveEmployeeIds = taskRepository.getTopFiveEmployeeIds();
-        return employeeService.findByIds(topFiveEmployeeIds);
+    public List<Long> getTopFiveEmployeeIdsInPastMonth() {
+        return taskRepository.findTopFiveEmployeeIdsInPastMonth();
     }
 }

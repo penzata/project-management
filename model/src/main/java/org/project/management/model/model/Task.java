@@ -52,7 +52,7 @@ public class Task {
         return Optional.ofNullable(this.assigneeId);
     }
 
-    public Task updateAttributes(Task task) {
+    public Task updateParameters(Task task) {
         this.title = task.getTitle();
         this.description = task.getDescription();
         this.dueDate = task.getDueDate();

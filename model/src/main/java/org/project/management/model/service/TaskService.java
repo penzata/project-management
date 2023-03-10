@@ -1,6 +1,5 @@
 package org.project.management.model.service;
 
-import org.project.management.model.model.Employee;
 import org.project.management.model.model.Task;
 
 import java.util.List;
@@ -17,6 +16,5 @@ public interface TaskService {
 
     Task assignEmployee(Long taskId, Long assigneeId);
 
-    List<Employee> getTopFiveEmployeesByCompletedTasks();
-
+    List<Long> getTopFiveEmployeeIdsInPastMonth();
 }
