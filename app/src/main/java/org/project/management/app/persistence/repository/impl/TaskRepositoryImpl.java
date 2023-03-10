@@ -38,12 +38,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    @Query("""
-            SELECT t.assigneeId, e FROM tasks t, employees e WHERE t = e.id 
-            """)
     public List<Long> getTopFiveEmployeeIds() {
-
-
-        return null;
+        return taskRepositoryJpa.getDistinctTopByAssigneeId();
     }
 }

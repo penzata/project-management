@@ -13,5 +13,5 @@ public interface EmployeeRepository {
 
     void deleteById(Long id);
 
-    List<Employee> findByIds(List<Long> topFiveEmployeeIds);
+    List<Employee> findByIds(List<Long> ids);
 }

@@ -36,8 +36,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> findByIds(List<Long> topFiveEmployeeIds) {
-        return employeeRepositoryJpa.findAllByIdEquals(topFiveEmployeeIds).stream()
+    public List<Employee> findByIds(List<Long> ids) {
+        return employeeRepositoryJpa.findAllByIdEquals(ids).stream()
                 .map(EmployeeEntity::toModel)
                 .toList();
     }

@@ -46,8 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByIds(List<Long> employeeIds) {
-        return employeeRepository.findByIds(employeeIds);
+    public List<Employee> findByIds(List<Long> topFiveEmployeeIds) {
+        return employeeRepository.findByIds(topFiveEmployeeIds);
     }
 
     @Override
