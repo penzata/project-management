@@ -5,7 +5,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
-import org.project.management.app.rest.dto.ErrorDTO;
+import org.project.management.app.rest.dto.CustomMessageDTO;
+import org.project.management.app.rest.dto.ViolationDTO;
 import org.project.management.model.exceptions.ExistingEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,11 @@ public class GlobalExceptionHandlerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<List<ErrorDTO>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<List<ViolationDTO>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error(ex.getMessage(), ex);
-        List<ErrorDTO> errors = new ArrayList<>();
+        List<ViolationDTO> errors = new ArrayList<>();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            errors.add(ErrorDTO.builder()
+            errors.add(ViolationDTO.builder()
                     .fieldName(fieldError.getField())
                     .message(fieldError.getDefaultMessage())
                     .build());
@@ -40,11 +41,11 @@ public class GlobalExceptionHandlerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<List<ErrorDTO>> handleConstraintViolationException(ConstraintViolationException ex) {
+    public ResponseEntity<List<ViolationDTO>> handleConstraintViolationException(ConstraintViolationException ex) {
         log.error(ex.getMessage(), ex);
-        List<ErrorDTO> violations = new ArrayList<>();
+        List<ViolationDTO> violations = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            violations.add(ErrorDTO.builder()
+            violations.add(ViolationDTO.builder()
                     .fieldName(violation.getPropertyPath().toString())
                     .message(violation.getMessage())
                     .build());
@@ -55,41 +56,41 @@ public class GlobalExceptionHandlerAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    public ResponseEntity<CustomMessageDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.badRequest()
-                .body(ErrorDTO.builder()
+                .body(CustomMessageDTO.builder()
                         .message(ex.getMostSpecificCause().getMessage())
                         .build());
     }
 
     @ExceptionHandler(UnexpectedTypeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> handleUnexpectedTypeException(UnexpectedTypeException ex) {
+    public ResponseEntity<CustomMessageDTO> handleUnexpectedTypeException(UnexpectedTypeException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.badRequest()
-                .body(ErrorDTO.builder()
+                .body(CustomMessageDTO.builder()
                         .message(ex.getLocalizedMessage())
                         .build());
     }
 
     @ExceptionHandler(InvalidFormatException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> handleInvalidFormatException(InvalidFormatException ex) {
+    public ResponseEntity<CustomMessageDTO> handleInvalidFormatException(InvalidFormatException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.badRequest()
-                .body(ErrorDTO.builder()
+                .body(CustomMessageDTO.builder()
                         .message(ex.getMessage())
                         .build());
     }
 
     @ExceptionHandler(ExistingEmailException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ErrorDTO> handleExistingEmailException(ExistingEmailException ex) {
+    public ResponseEntity<CustomMessageDTO> handleExistingEmailException(ExistingEmailException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(409)
-                .body(ErrorDTO.builder()
-                        .message(ExceptionConstants.EXISTING_EMAIL)
+                .body(CustomMessageDTO.builder()
+                        .message(MessageConstants.EXISTING_EMAIL)
                         .build());
     }
 }
