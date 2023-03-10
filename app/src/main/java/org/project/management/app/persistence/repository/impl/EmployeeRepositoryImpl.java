@@ -37,8 +37,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public List<Employee> findByIds(List<Long> ids) {
-        return employeeRepositoryJpa.findAllByIdEquals(ids).stream()
+        return employeeRepositoryJpa.findAllByIdIn(ids).stream()
                 .map(EmployeeEntity::toModel)
                 .toList();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return employeeRepositoryJpa.existsByEmail(email);
     }
 }

@@ -40,7 +40,6 @@ public class TaskEntity {
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .assigneeId(task.getAssigneeId().orElse(null))
-//                .assigneeId(task.getAssigneeId().isPresent() ? task.getAssigneeId().get() : null)
                 .dueDate(task.getDueDate())
                 .build();
     }

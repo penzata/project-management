@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepositoryJpa extends JpaRepository<EmployeeEntity, Long> {
 
-    List<EmployeeEntity> findAllByIdEquals(List<Long> ids);
+    List<EmployeeEntity> findAllByIdIn(List<Long> ids);
+
+    boolean existsByEmail(String email);
 }
