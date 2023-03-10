@@ -14,4 +14,6 @@ public interface EmployeeRepository {
     void deleteById(Long id);
 
     List<Employee> findByIds(List<Long> ids);
+
+    boolean existsByEmail(String email);
 }
