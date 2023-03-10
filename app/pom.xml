@@ -78,6 +78,12 @@
             <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.project.management</groupId>
+            <artifactId>project-management-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
