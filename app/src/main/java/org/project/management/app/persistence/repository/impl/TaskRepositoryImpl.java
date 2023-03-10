@@ -5,7 +5,6 @@ import org.project.management.app.persistence.entity.TaskEntity;
 import org.project.management.app.persistence.repository.TaskRepositoryJpa;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,7 +37,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Long> getTopFiveEmployeeIds() {
-        return taskRepositoryJpa.getDistinctTopByAssigneeId();
+    public List<Long> findTopFiveEmployeeIdsInPastMonth() {
+
+        return taskRepositoryJpa.findTopFiveEmployeeIdsInPastMonth();
     }
 }

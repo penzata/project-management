@@ -16,5 +16,5 @@ public interface EmployeeService {
 
     List<Employee> findByIds(List<Long> topFiveEmployeeIds);
 
-    List<Employee> getTopFiveEmployeesByCompletedTasks();
+    List<Employee> getTopFiveEmployeesByCompletedTasksInPastMonth();
 }

@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
         Task taskToUpdate = taskRepository.findById(id)
                 .orElseThrow();
 
-        Task updatedTask = taskToUpdate.updateAttributes(task);
+        Task updatedTask = taskToUpdate.updateParameters(task);
 
         return taskRepository.save(updatedTask);
     }
@@ -58,7 +58,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Long> getTopFiveEmployeeIds() {
-        return taskRepository.getTopFiveEmployeeIds();
+    public List<Long> getTopFiveEmployeeIdsInPastMonth() {
+        return taskRepository.findTopFiveEmployeeIdsInPastMonth();
     }
 }

@@ -16,5 +16,5 @@ public interface TaskService {
 
     Task assignEmployee(Long taskId, Long assigneeId);
 
-    List<Long> getTopFiveEmployeeIds();
+    List<Long> getTopFiveEmployeeIdsInPastMonth();
 }

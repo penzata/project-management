@@ -51,9 +51,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getTopFiveEmployeesByCompletedTasks() {
+    public List<Employee> getTopFiveEmployeesByCompletedTasksInPastMonth() {
         //todo works for now, later change to user aggregation in the repository
-        List<Long> topFiveEmployeeIds = taskService.getTopFiveEmployeeIds();
+        List<Long> topFiveEmployeeIds = taskService.getTopFiveEmployeeIdsInPastMonth();
         return employeeRepository.findByIds(topFiveEmployeeIds);
     }
 }
