@@ -3,14 +3,16 @@ package org.project.management.model.service.impl;
 import org.project.management.model.model.Employee;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
+import org.project.management.model.service.TaskService;
 
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
+    private final TaskService taskService;
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-
+    public EmployeeServiceImpl(TaskService taskService, EmployeeRepository employeeRepository) {
+        this.taskService = taskService;
         this.employeeRepository = employeeRepository;
     }
 
@@ -44,7 +46,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByIds(List<Long> topFiveEmployeeIds) {
+    public List<Employee> findByIds(List<Long> employeeIds) {
+        return employeeRepository.findByIds(employeeIds);
+    }
+
+    @Override
+    public List<Employee> getTopFiveEmployeesByCompletedTasks() {
+        //todo works for now, later change to user aggregation in the repository
+        List<Long> topFiveEmployeeIds = taskService.getTopFiveEmployeeIds();
         return employeeRepository.findByIds(topFiveEmployeeIds);
     }
 }
