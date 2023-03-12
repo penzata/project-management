@@ -3,9 +3,9 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.EmployeeEntity;
 import org.project.management.app.persistence.repository.EmployeeRepositoryJpa;
+import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
-import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.repository.EmployeeRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -66,14 +66,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         ));
 
         return jdbcTemplate.query("""
-            SELECT e.id, e.email, e.full_name, COUNT(t.id) as completed_tasks 
-            FROM employees e 
-            INNER JOIN tasks t on e.id = t.assignee_id and t.completed_date between :startDate and now()
-            GROUP BY e.id, e.email, e.full_name
-            order by completed_tasks DESC
-            LIMIT :limit
-        """, params, (rs, rowNum) -> this.mapRow(rs));
-        //return employeeRepositoryJpa.getTopEmpoyees(maxNum);
+                            SELECT e.id, e.email, e.full_name, COUNT(t.id) as completed_tasks 
+                            FROM employees e 
+                            INNER JOIN tasks t on e.id = t.assignee_id and t.completed_date between :startDate and now()
+                            GROUP BY e.id, e.email, e.full_name
+                            order by completed_tasks DESC
+                            LIMIT :limit
+                        """,
+                params, (rs, rowNum) -> this.mapRow(rs));
     }
 
     public EmployeeWithCompletedTasks mapRow(ResultSet rs) throws SQLException {
