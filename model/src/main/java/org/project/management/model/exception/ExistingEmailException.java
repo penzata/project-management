@@ -1,3 +1,3 @@
-package org.project.management.model.exceptions;
+package org.project.management.model.exception;
 
 public class ExistingEmailException extends BusinessException {}

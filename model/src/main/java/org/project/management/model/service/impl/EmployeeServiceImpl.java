@@ -1,7 +1,7 @@
 package org.project.management.model.service.impl;
 
-import org.project.management.model.exceptions.ExistingEmailException;
-import org.project.management.model.exceptions.IdNotFoundException;
+import org.project.management.model.exception.ExistingEmailException;
+import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
@@ -47,6 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
+        foundById(id);
         employeeRepository.deleteById(id);
     }
 

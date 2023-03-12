@@ -1,6 +1,6 @@
 package org.project.management.model.service.impl;
 
-import org.project.management.model.exceptions.IdNotFoundException;
+import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
@@ -45,6 +45,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Long id) {
+        foundById(id);
         taskRepository.deleteById(id);
     }
 

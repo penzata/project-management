@@ -3,7 +3,7 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.TaskEntity;
 import org.project.management.app.persistence.repository.TaskRepositoryJpa;
-import org.project.management.model.exceptions.IdNotFoundException;
+import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
 import org.springframework.stereotype.Repository;

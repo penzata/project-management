@@ -2,9 +2,8 @@ package org.project.management.app.rest.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import org.project.management.app.exceptionhandler.MessageConstants;
+import org.project.management.app.exceptionhandler.Messages;
 import org.project.management.app.persistence.entity.TaskEntity;
 import org.project.management.app.rest.dto.CustomMessageDTO;
 import org.project.management.app.rest.dto.TaskDTO;
@@ -51,7 +50,7 @@ public class TaskController {
     public CustomMessageDTO deleteTask(@Min(1) @PathVariable Long id) {
         taskService.deleteTask(id);
         return CustomMessageDTO.builder()
-                .message(MessageConstants.DELETED_TASK)
+                .message(Messages.DELETED_TASK)
                 .build();
     }
 

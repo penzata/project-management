@@ -3,7 +3,7 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.EmployeeEntity;
 import org.project.management.app.persistence.repository.EmployeeRepositoryJpa;
-import org.project.management.model.exceptions.IdNotFoundException;
+import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.repository.EmployeeRepository;
 import org.springframework.stereotype.Repository;
