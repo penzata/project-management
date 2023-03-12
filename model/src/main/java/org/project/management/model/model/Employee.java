@@ -53,7 +53,7 @@ public class Employee {
         this.monthlySalary = employee.getMonthlySalary().orElse(null);
 
         MessagingBroker.produceEvent(Events.INFO_UPDATED);
-        return employee;
+        return this;
     }
 
     public String getFullName() {
@@ -75,5 +75,17 @@ public class Employee {
     public Optional<BigDecimal> getMonthlySalary() {
 
         return Optional.ofNullable(this.monthlySalary);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", dateOfBirth=" + dateOfBirth +
+                ", monthlySalary=" + monthlySalary +
+                '}';
     }
 }

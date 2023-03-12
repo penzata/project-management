@@ -2,11 +2,14 @@ package org.project.management.model.model;
 
 import org.project.management.model.message.Events;
 import org.project.management.model.message.MessagingBroker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Task {
+    private final Logger log = LoggerFactory.getLogger(Task.class);
     private Long id;
     private String title;
     private String description;
@@ -58,7 +61,7 @@ public class Task {
         this.dueDate = task.getDueDate().orElse(null);
 
         MessagingBroker.produceEvent(Events.PARAMS_UPDATED);
-        return task;
+        return this;
     }
 
     public String getTitle() {
@@ -72,5 +75,16 @@ public class Task {
     public Optional<LocalDateTime> getDueDate() {
 
         return Optional.ofNullable(this.dueDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", assigneeId=" + assigneeId +
+                ", dueDate=" + dueDate +
+                '}';
     }
 }
