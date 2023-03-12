@@ -42,12 +42,12 @@ public class Employee {
         return Optional.ofNullable(this.id);
     }
 
-    public Employee updateAttributes(Employee employee) {
+    public Employee updatePersonalInfo(Employee employee) {
         this.fullName = employee.getFullName();
         this.email = employee.getEmail();
         this.phoneNumber = employee.getPhoneNumber();
         this.dateOfBirth = employee.getDateOfBirth();
-        this.monthlySalary = employee.getMonthlySalary();
+        this.monthlySalary = employee.getMonthlySalary().orElse(null);
 
         return employee;
     }
@@ -68,7 +68,8 @@ public class Employee {
         return dateOfBirth;
     }
 
-    public BigDecimal getMonthlySalary() {
-        return monthlySalary;
+    public Optional<BigDecimal> getMonthlySalary() {
+
+        return Optional.ofNullable(this.monthlySalary);
     }
 }

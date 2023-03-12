@@ -35,11 +35,11 @@ public class Task {
         return new Task(id, title, description, assigneeId, dueDate);
     }
 
-    //todo fix messaging service
     public void assignTo(Employee employee) {
         this.assigneeId = employee.getId()
                 .orElseThrow();
 
+        //todo fix messaging service
         MessagingService.getInstance().produceEvent("Employee assigned to task");
     }
 
@@ -55,7 +55,7 @@ public class Task {
     public Task updateParameters(Task task) {
         this.title = task.getTitle();
         this.description = task.getDescription();
-        this.dueDate = task.getDueDate();
+        this.dueDate = task.getDueDate().orElse(null);
 
         return task;
     }
@@ -68,7 +68,8 @@ public class Task {
         return description;
     }
 
-    public LocalDateTime getDueDate() {
-        return dueDate;
+    public Optional<LocalDateTime> getDueDate() {
+
+        return Optional.ofNullable(this.dueDate);
     }
 }

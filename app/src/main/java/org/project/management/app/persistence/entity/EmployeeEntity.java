@@ -46,7 +46,7 @@ public class EmployeeEntity {
                 .email(employee.getEmail())
                 .phoneNumber(employee.getPhoneNumber())
                 .dateOfBirth(employee.getDateOfBirth())
-                .monthlySalary(employee.getMonthlySalary())
+                .monthlySalary(employee.getMonthlySalary().orElse(null))
                 .build();
     }
 

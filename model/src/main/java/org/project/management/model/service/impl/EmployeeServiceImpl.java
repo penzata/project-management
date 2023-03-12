@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeToUpdate = employeeRepository.findById(id)
                 .orElseThrow();
 
-        Employee updatedEmployee = employeeToUpdate.updateAttributes(employee);
+        Employee updatedEmployee = employeeToUpdate.updatePersonalInfo(employee);
         return employeeRepository.save(updatedEmployee);
     }
 

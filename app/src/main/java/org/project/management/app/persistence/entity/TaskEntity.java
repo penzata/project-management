@@ -40,7 +40,7 @@ public class TaskEntity {
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .assigneeId(task.getAssigneeId().orElse(null))
-                .dueDate(task.getDueDate())
+                .dueDate(task.getDueDate().orElse(null))
                 .build();
     }
 

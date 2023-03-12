@@ -93,4 +93,14 @@ public class GlobalExceptionHandlerAdvice {
                         .message(MessageConstants.EXISTING_EMAIL)
                         .build());
     }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<CustomMessageDTO> handleErrors(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.internalServerError()
+                .body(CustomMessageDTO.builder()
+                        .message(ex.getMessage())
+                        .build());
+    }
 }
