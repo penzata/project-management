@@ -7,6 +7,7 @@ import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
 import org.project.management.app.rest.dto.CustomMessageDTO;
 import org.project.management.app.rest.dto.ViolationDTO;
+import org.project.management.model.exceptions.BusinessException;
 import org.project.management.model.exceptions.ExistingEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,6 +92,16 @@ public class GlobalExceptionHandlerAdvice {
         return ResponseEntity.status(409)
                 .body(CustomMessageDTO.builder()
                         .message(MessageConstants.EXISTING_EMAIL)
+                        .build());
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<CustomMessageDTO> badRequestHandler(BusinessException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.badRequest()
+                .body(CustomMessageDTO.builder()
+                        .message(ex.getClass().getSimpleName() + " - " + ex.getMessage())
                         .build());
     }
 

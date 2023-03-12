@@ -3,6 +3,7 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.TaskEntity;
 import org.project.management.app.persistence.repository.TaskRepositoryJpa;
+import org.project.management.model.exceptions.IdNotFoundException;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
 import org.springframework.stereotype.Repository;
@@ -22,11 +23,10 @@ public class TaskRepositoryImpl implements TaskRepository {
         return savedTask.toModel();
     }
 
-    // todo add custom exception and handler
     @Override
     public Optional<Task> findById(Long id) {
         TaskEntity taskEntity = taskRepositoryJpa.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IdNotFoundException(id.toString()));
 
         return Optional.ofNullable(taskEntity.toModel());
     }

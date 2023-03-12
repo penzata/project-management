@@ -14,7 +14,7 @@ public interface EmployeeService {
 
     void deleteEmployee(Long id);
 
-    List<Employee> findByIds(List<Long> topFiveEmployeeIds);
+    List<Employee> findByIds(List<Long> ids);
 
     List<Employee> getTopFiveEmployeesByCompletedTasksInPastMonth();
 }

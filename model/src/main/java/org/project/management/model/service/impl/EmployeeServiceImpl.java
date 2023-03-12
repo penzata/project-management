@@ -1,6 +1,7 @@
 package org.project.management.model.service.impl;
 
 import org.project.management.model.exceptions.ExistingEmailException;
+import org.project.management.model.exceptions.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
@@ -25,19 +26,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    // todo add custom exception and handler
     @Override
     public Employee getEmployee(Long id) {
 
-        return employeeRepository.findById(id)
-                .orElseThrow();
+        return foundById(id);
     }
 
-    // todo add custom exception and handler
+    private Employee foundById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(id.toString()));
+    }
+
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
-        Employee employeeToUpdate = employeeRepository.findById(id)
-                .orElseThrow();
+        Employee employeeToUpdate = foundById(id);
 
         Employee updatedEmployee = employeeToUpdate.updatePersonalInfo(employee);
         return employeeRepository.save(updatedEmployee);
@@ -49,8 +51,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByIds(List<Long> topFiveEmployeeIds) {
-        return employeeRepository.findByIds(topFiveEmployeeIds);
+    public List<Employee> findByIds(List<Long> ids) {
+        return employeeRepository.findByIds(ids);
     }
 
     @Override

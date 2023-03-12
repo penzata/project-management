@@ -3,6 +3,7 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.EmployeeEntity;
 import org.project.management.app.persistence.repository.EmployeeRepositoryJpa;
+import org.project.management.model.exceptions.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.repository.EmployeeRepository;
 import org.springframework.stereotype.Repository;
@@ -22,11 +23,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return savedEmployee.toModel();
     }
 
-    // todo add custom exception and handler
     @Override
     public Optional<Employee> findById(Long id) {
         EmployeeEntity employeeEntity = employeeRepositoryJpa.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IdNotFoundException(id.toString()));
         return Optional.ofNullable(employeeEntity.toModel());
     }
 

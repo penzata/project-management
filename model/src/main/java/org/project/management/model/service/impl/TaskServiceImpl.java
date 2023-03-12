@@ -1,5 +1,6 @@
 package org.project.management.model.service.impl;
 
+import org.project.management.model.exceptions.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
@@ -23,20 +24,20 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
-    // todo add custom exception and handler
     @Override
     public Task getTask(Long id) {
 
-        return taskRepository.findById(id)
-                .orElseThrow();
+        return foundById(id);
     }
 
-    // todo add custom exception and handler
+    private Task foundById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(id.toString()));
+    }
+
     @Override
     public Task updateTask(Long id, Task task) {
-        Task taskToUpdate = taskRepository.findById(id)
-                .orElseThrow();
-
+        Task taskToUpdate = foundById(id);
         Task updatedTask = taskToUpdate.updateParameters(task);
 
         return taskRepository.save(updatedTask);
@@ -49,8 +50,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task assignEmployee(Long taskId, Long assigneeId) {
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow();
+        Task task = foundById(taskId);
         Employee employee = employeeService.getEmployee(assigneeId);
         task.assignTo(employee);
 
