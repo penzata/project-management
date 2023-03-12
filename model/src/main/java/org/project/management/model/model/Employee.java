@@ -1,5 +1,8 @@
 package org.project.management.model.model;
 
+import org.project.management.model.message.Events;
+import org.project.management.model.message.MessagingBroker;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -49,6 +52,7 @@ public class Employee {
         this.dateOfBirth = employee.getDateOfBirth();
         this.monthlySalary = employee.getMonthlySalary().orElse(null);
 
+        MessagingBroker.produceEvent(Events.INFO_UPDATED);
         return employee;
     }
 

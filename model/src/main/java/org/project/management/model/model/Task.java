@@ -1,6 +1,7 @@
 package org.project.management.model.model;
 
-import org.project.management.model.service.impl.MessagingService;
+import org.project.management.model.message.Events;
+import org.project.management.model.message.MessagingBroker;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -39,8 +40,7 @@ public class Task {
         this.assigneeId = employee.getId()
                 .orElseThrow();
 
-        //todo fix messaging service
-        MessagingService.getInstance().produceEvent("Employee assigned to task");
+        MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED);
     }
 
     public Optional<Long> getId() {
@@ -57,6 +57,7 @@ public class Task {
         this.description = task.getDescription();
         this.dueDate = task.getDueDate().orElse(null);
 
+        MessagingBroker.produceEvent(Events.PARAMS_UPDATED);
         return task;
     }
 
