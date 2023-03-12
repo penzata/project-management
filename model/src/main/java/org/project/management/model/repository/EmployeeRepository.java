@@ -18,4 +18,6 @@ public interface EmployeeRepository {
     List<Employee> findAllEmployees();
 
     List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum);
+
+    List<Employee> findByProjectId(Long projectId);
 }

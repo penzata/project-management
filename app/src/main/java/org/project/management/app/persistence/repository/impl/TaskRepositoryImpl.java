@@ -50,4 +50,9 @@ public class TaskRepositoryImpl implements TaskRepository {
                 .map(TaskEntity::toModel)
                 .toList();
     }
+
+    @Override
+    public void deleteByProjectId(Long projectId) {
+        taskRepositoryJpa.deleteByProjectId(projectId);
+    }
 }

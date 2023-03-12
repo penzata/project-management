@@ -16,9 +16,11 @@ public interface TaskService {
 
     Task assignEmployee(Long taskId, Long employeeId);
 
-    void unassignDeletedEmployee(Long employeeId);
+    void unassignAllFromEmployee(Long employeeId);
 
     Task unassignEmployee(Long id);
 
     List<Task> getAllTasks();
+
+    void deleteByProjectId(Long projectId);
 }

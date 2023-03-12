@@ -15,6 +15,8 @@ public class Employee {
     private LocalDate dateOfBirth;
     private BigDecimal monthlySalary;
 
+    private Long projectId;
+
     private Employee() {
     }
 
@@ -23,13 +25,15 @@ public class Employee {
                      String email,
                      Long phoneNumber,
                      LocalDate dateOfBirth,
-                     BigDecimal monthlySalary) {
+                     BigDecimal monthlySalary,
+                     Long projectId) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
         this.monthlySalary = monthlySalary;
+        this.projectId = projectId;
     }
 
     public static Employee employee(Long id,
@@ -37,8 +41,9 @@ public class Employee {
                                     String email,
                                     Long phoneNumber,
                                     LocalDate dateOfBirth,
-                                    BigDecimal monthlySalary) {
-        return new Employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary);
+                                    BigDecimal monthlySalary,
+                                    Long projectId) {
+        return new Employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary, projectId);
     }
 
     public Long getId() {
@@ -56,6 +61,13 @@ public class Employee {
         return this;
     }
 
+    public void assignToProject(Project project) {
+        this.projectId = project.getId();
+    }
+
+    public void unassignFromProject() {
+        this.projectId = null;
+    }
     public String getFullName() {
         return fullName;
     }
@@ -77,6 +89,10 @@ public class Employee {
         return monthlySalary;
     }
 
+    public Long getProjectId() {
+        return projectId;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -86,6 +102,7 @@ public class Employee {
                 ", phoneNumber=" + phoneNumber +
                 ", dateOfBirth=" + dateOfBirth +
                 ", monthlySalary=" + monthlySalary +
+                ", projectId=" + projectId +
                 '}';
     }
 
@@ -103,6 +120,7 @@ public class Employee {
                 email.equals(employee.email) &&
                 phoneNumber.equals(employee.phoneNumber) &&
                 dateOfBirth.equals(employee.dateOfBirth) &&
+                Objects.equals(projectId, employee.getProjectId()) &&
                 monthlySalary.equals(employee.monthlySalary);
     }
 

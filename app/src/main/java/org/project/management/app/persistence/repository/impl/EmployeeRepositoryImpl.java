@@ -76,6 +76,11 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 params, (rs, rowNum) -> this.mapRow(rs));
     }
 
+    @Override
+    public List<Employee> findByProjectId(Long projectId) {
+        return employeeRepositoryJpa.findAllByProjectId(projectId);
+    }
+
     public EmployeeWithCompletedTasks mapRow(ResultSet rs) throws SQLException {
         return new EmployeeWithCompletedTasks(rs.getLong("id"),
                 rs.getString("full_name"),

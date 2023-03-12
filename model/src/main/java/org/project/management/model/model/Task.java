@@ -3,15 +3,12 @@ package org.project.management.model.model;
 import org.project.management.model.exception.TaskAlreadyAssignedException;
 import org.project.management.model.message.Events;
 import org.project.management.model.message.MessagingBroker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
 public class Task {
-    Logger log = LoggerFactory.getLogger(Task.class);
     private Long id;
     private String title;
     private String description;
@@ -19,6 +16,8 @@ public class Task {
     private LocalDateTime dueDate;
 
     private LocalDateTime completedDate;
+
+    private Long projectId;
 
     private Task() {
     }
@@ -28,13 +27,15 @@ public class Task {
                  String description,
                  Long assigneeId,
                  LocalDateTime dueDate,
-                 LocalDateTime completedDate) {
+                 LocalDateTime completedDate,
+                 Long projectId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.assigneeId = assigneeId;
         this.dueDate = dueDate;
         this.completedDate = completedDate;
+        this.projectId = projectId;
     }
 
     public static Task task(Long id,
@@ -42,8 +43,9 @@ public class Task {
                             String description,
                             Long assigneeId,
                             LocalDateTime dueDate,
-                            LocalDateTime completedDate) {
-        return new Task(id, title, description, assigneeId, dueDate, completedDate);
+                            LocalDateTime completedDate,
+                            Long projectId) {
+        return new Task(id, title, description, assigneeId, dueDate, completedDate, projectId);
     }
 
     public void assignTo(Employee employee) {
@@ -55,7 +57,7 @@ public class Task {
         MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED);
     }
 
-    public void unassignEmployee() {
+    public void unassignFromEmployee() {
         this.assigneeId = null;
         MessagingBroker.produceEvent(Events.EMPLOYEE_UNASSIGNED);
     }
@@ -97,6 +99,10 @@ public class Task {
         return Optional.ofNullable(completedDate);
     }
 
+    public Long getProjectId() {
+        return projectId;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -105,6 +111,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", assigneeId=" + assigneeId +
                 ", dueDate=" + dueDate +
+                ", projectId=" + projectId +
                 '}';
     }
 
@@ -121,11 +128,12 @@ public class Task {
                 title.equals(task.title) &&
                 description.equals(task.description) &&
                 Objects.equals(assigneeId, task.assigneeId) &&
+                Objects.equals(projectId, task.projectId) &&
                 dueDate.equals(task.dueDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, dueDate);
+        return Objects.hash(title, description, dueDate, projectId);
     }
 }

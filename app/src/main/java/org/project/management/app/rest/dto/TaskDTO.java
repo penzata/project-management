@@ -2,6 +2,7 @@ package org.project.management.app.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.project.management.model.model.Task;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +22,9 @@ public record TaskDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                       LocalDateTime dueDate,
 
                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-                      LocalDateTime completedDate) {
+                      LocalDateTime completedDate,
+                      @NotNull
+                      Long projectId) {
 
     public static TaskDTO fromModel(Task task) {
         return TaskDTO.builder()
@@ -31,10 +34,11 @@ public record TaskDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                 .assigneeId(task.getAssigneeId().orElse(null))
                 .dueDate(task.getDueDate().orElse(null))
                 .completedDate(task.getCompletedDate().orElse(null))
+                .projectId(task.getProjectId())
                 .build();
     }
 
     public Task toModel() {
-        return Task.task(id, title, description, assigneeId, dueDate, completedDate);
+        return Task.task(id, title, description, assigneeId, dueDate, completedDate, projectId);
     }
 }

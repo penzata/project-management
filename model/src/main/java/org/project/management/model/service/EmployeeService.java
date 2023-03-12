@@ -18,4 +18,10 @@ public interface EmployeeService {
     void deleteEmployee(Long id);
 
     List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum);
+
+    void unassignAllFromProject(Long projectId);
+
+    Employee assignToProject(Long id, Long projectId);
+
+    Employee unassignFromProject(Long id);
 }

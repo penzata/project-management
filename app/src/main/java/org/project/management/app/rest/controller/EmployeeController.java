@@ -71,4 +71,17 @@ public class EmployeeController {
         Employee employee = employeeService.updateEmployee(id, employeeDTO.toModel());
         return EmployeeDTO.fromModel(employee);
     }
+
+    @PutMapping(value = "/{id}/project/{projectId}")
+    public EmployeeDTO assignToProject(@Min(1) @PathVariable Long id,
+                                  @PathVariable(name = "projectId") Long projectId) {
+        Employee employee = employeeService.assignToProject(id, projectId);
+        return EmployeeDTO.fromModel(employee);
+    }
+
+    @DeleteMapping(value = "/{id}/project")
+    public EmployeeDTO unassignFromProject(@Min(1) @PathVariable Long id) {
+        Employee employee = employeeService.unassignFromProject(id);
+        return EmployeeDTO.fromModel(employee);
+    }
 }

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import org.project.management.app.persistence.entity.EmployeeEntity;
 import org.project.management.model.model.Employee;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,7 +24,9 @@ public record EmployeeDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                           @DateTimeFormat(pattern = "yyyy-MM-dd")
                           LocalDate dateOfBirth,
                           @NotNull
-                          BigDecimal monthlySalary) {
+                          BigDecimal monthlySalary,
+                          @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+                          Long projectId) {
 
     public static EmployeeDTO fromModel(Employee employee) {
         return EmployeeDTO.builder()
@@ -35,10 +36,11 @@ public record EmployeeDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                 .phoneNumber(employee.getPhoneNumber())
                 .dateOfBirth(employee.getDateOfBirth())
                 .monthlySalary(employee.getMonthlySalary())
+                .projectId(employee.getProjectId())
                 .build();
     }
 
     public Employee toModel() {
-        return Employee.employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary);
+        return Employee.employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary, projectId);
     }
 }

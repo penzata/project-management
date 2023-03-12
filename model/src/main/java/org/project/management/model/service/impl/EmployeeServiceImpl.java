@@ -3,18 +3,23 @@ package org.project.management.model.service.impl;
 import org.project.management.model.exception.ExistingEmailException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
+import org.project.management.model.model.Project;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
+import org.project.management.model.service.ProjectService;
 import org.project.management.model.service.TaskService;
 
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
     private final TaskService taskService;
+
+    private final ProjectService projectService;
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(TaskService taskService, EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(TaskService taskService, ProjectService projectService, EmployeeRepository employeeRepository) {
         this.taskService = taskService;
+        this.projectService = projectService;
         this.employeeRepository = employeeRepository;
     }
 
@@ -53,12 +58,39 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long id) {
         findById(id);
         employeeRepository.deleteById(id);
-        taskService.unassignDeletedEmployee(id);
+        taskService.unassignAllFromEmployee(id);
     }
 
     @Override
     public List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum) {
         return employeeRepository.getTopEmployees(maxNum);
+    }
+
+    @Override
+    public void unassignAllFromProject(Long projectId) {
+        employeeRepository.findByProjectId(projectId)
+                .forEach(emp -> {
+                    emp.unassignFromProject();
+                    employeeRepository.save(emp);
+                });
+    }
+
+    @Override
+    public Employee assignToProject(Long id, Long projectId) {
+        Employee employee = employeeRepository.findById(id);
+        Project project = projectService.getProjectOrThrow(projectId);
+
+        employee.assignToProject(project);
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee unassignFromProject(Long id) {
+        Employee employee = employeeRepository.findById(id);
+        employee.unassignFromProject();
+
+        return employeeRepository.save(employee);
     }
 
 }
