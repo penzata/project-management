@@ -5,6 +5,7 @@ import org.project.management.model.message.MessagingBroker;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Employee {
@@ -50,7 +51,7 @@ public class Employee {
         this.email = employee.getEmail();
         this.phoneNumber = employee.getPhoneNumber();
         this.dateOfBirth = employee.getDateOfBirth();
-        this.monthlySalary = employee.getMonthlySalary().orElse(null);
+        this.monthlySalary = employee.getMonthlySalary();
 
         MessagingBroker.produceEvent(Events.INFO_UPDATED);
         return this;
@@ -72,9 +73,9 @@ public class Employee {
         return dateOfBirth;
     }
 
-    public Optional<BigDecimal> getMonthlySalary() {
+    public BigDecimal getMonthlySalary() {
 
-        return Optional.ofNullable(this.monthlySalary);
+        return monthlySalary;
     }
 
     @Override
@@ -87,5 +88,27 @@ public class Employee {
                 ", dateOfBirth=" + dateOfBirth +
                 ", monthlySalary=" + monthlySalary +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                fullName.equals(employee.fullName) &&
+                email.equals(employee.email) &&
+                phoneNumber.equals(employee.phoneNumber) &&
+                dateOfBirth.equals(employee.dateOfBirth) &&
+                monthlySalary.equals(employee.monthlySalary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, email, phoneNumber, dateOfBirth, monthlySalary);
     }
 }

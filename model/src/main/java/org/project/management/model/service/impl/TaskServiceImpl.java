@@ -6,13 +6,10 @@ import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
 import org.project.management.model.service.EmployeeService;
 import org.project.management.model.service.TaskService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class TaskServiceImpl implements TaskService {
-    private final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
     private final EmployeeService employeeService;
     private final TaskRepository taskRepository;
 
@@ -40,11 +37,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Long id, Task task) {
-        log.info("=========task: {}", task);
         Task taskToUpdate = foundById(id);
-        log.info("=========taskToUpdate: {}", taskToUpdate);
         Task updatedTask = taskToUpdate.updateParameters(task);
-log.info("=========updatedTask: {}", updatedTask);
+
         return taskRepository.save(updatedTask);
     }
 

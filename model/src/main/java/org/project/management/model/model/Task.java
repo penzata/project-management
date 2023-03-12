@@ -1,15 +1,14 @@
 package org.project.management.model.model;
 
+import org.project.management.model.exception.AlreadyAssignedEmployeeException;
 import org.project.management.model.message.Events;
 import org.project.management.model.message.MessagingBroker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Task {
-    private final Logger log = LoggerFactory.getLogger(Task.class);
     private Long id;
     private String title;
     private String description;
@@ -40,9 +39,15 @@ public class Task {
     }
 
     public void assignTo(Employee employee) {
-        this.assigneeId = employee.getId()
-                .orElseThrow();
-
+        Optional<Long> employeeId = employee.getId();
+        if (employeeId.isPresent()) {
+            Long empId = employeeId.get();
+            if (Objects.equals(this.assigneeId, empId)) {
+                throw new AlreadyAssignedEmployeeException(empId.toString());
+            } else {
+                this.assigneeId = empId;
+            }
+        }
         MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED);
     }
 
@@ -86,5 +91,26 @@ public class Task {
                 ", assigneeId=" + assigneeId +
                 ", dueDate=" + dueDate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+                title.equals(task.title) &&
+                description.equals(task.description) &&
+                Objects.equals(assigneeId, task.assigneeId) &&
+                dueDate.equals(task.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, dueDate);
     }
 }
