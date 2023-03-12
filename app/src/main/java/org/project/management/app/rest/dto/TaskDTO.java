@@ -2,8 +2,9 @@ package org.project.management.app.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import org.project.management.app.persistence.entity.TaskEntity;
+import org.project.management.model.model.Task;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -18,23 +19,26 @@ public record TaskDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                       @JsonProperty(access = JsonProperty.Access.READ_ONLY)
                       Long assigneeId,
                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-                      LocalDateTime dueDate) {
+                      LocalDateTime dueDate,
 
-    public static TaskDTO fromEntity(TaskEntity taskEntity) {
+                      @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                      LocalDateTime completedDate,
+                      @NotNull
+                      Long projectId) {
+
+    public static TaskDTO fromModel(Task task) {
         return TaskDTO.builder()
-                .id(taskEntity.getId())
-                .title(taskEntity.getTitle())
-                .description(taskEntity.getDescription())
-                .assigneeId(taskEntity.getAssigneeId())
-                .dueDate(taskEntity.getDueDate())
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .assigneeId(task.getAssigneeId().orElse(null))
+                .dueDate(task.getDueDate().orElse(null))
+                .completedDate(task.getCompletedDate().orElse(null))
+                .projectId(task.getProjectId())
                 .build();
     }
 
-    public TaskEntity toEntity() {
-        return TaskEntity.builder()
-                .title(title)
-                .description(description)
-                .dueDate(dueDate)
-                .build();
+    public Task toModel() {
+        return Task.task(id, title, description, assigneeId, dueDate, completedDate, projectId);
     }
 }

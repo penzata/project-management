@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import org.project.management.app.persistence.entity.EmployeeEntity;
+import org.project.management.model.model.Employee;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -24,26 +24,23 @@ public record EmployeeDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                           @DateTimeFormat(pattern = "yyyy-MM-dd")
                           LocalDate dateOfBirth,
                           @NotNull
-                          BigDecimal monthlySalary) {
+                          BigDecimal monthlySalary,
+                          @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+                          Long projectId) {
 
-    public static EmployeeDTO fromEntity(EmployeeEntity employeeEntity) {
+    public static EmployeeDTO fromModel(Employee employee) {
         return EmployeeDTO.builder()
-                .id(employeeEntity.getId())
-                .fullName(employeeEntity.getFullName())
-                .email(employeeEntity.getEmail())
-                .phoneNumber(employeeEntity.getPhoneNumber())
-                .dateOfBirth(employeeEntity.getDateOfBirth())
-                .monthlySalary(employeeEntity.getMonthlySalary())
+                .id(employee.getId())
+                .fullName(employee.getFullName())
+                .email(employee.getEmail())
+                .phoneNumber(employee.getPhoneNumber())
+                .dateOfBirth(employee.getDateOfBirth())
+                .monthlySalary(employee.getMonthlySalary())
+                .projectId(employee.getProjectId())
                 .build();
     }
 
-    public EmployeeEntity toEntity() {
-        return EmployeeEntity.builder()
-                .fullName(fullName)
-                .email(email)
-                .phoneNumber(phoneNumber)
-                .dateOfBirth(dateOfBirth)
-                .monthlySalary(monthlySalary)
-                .build();
+    public Employee toModel() {
+        return Employee.employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary, projectId);
     }
 }

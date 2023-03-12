@@ -3,12 +3,12 @@ package org.project.management.app.persistence.repository.impl;
 import lombok.AllArgsConstructor;
 import org.project.management.app.persistence.entity.TaskEntity;
 import org.project.management.app.persistence.repository.TaskRepositoryJpa;
+import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -22,13 +22,12 @@ public class TaskRepositoryImpl implements TaskRepository {
         return savedTask.toModel();
     }
 
-    // todo add custom exception and handler
     @Override
-    public Optional<Task> findById(Long id) {
+    public Task findById(Long id) {
         TaskEntity taskEntity = taskRepositoryJpa.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new IdNotFoundException(id.toString()));
 
-        return Optional.ofNullable(taskEntity.toModel());
+        return taskEntity.toModel();
     }
 
     @Override
@@ -37,8 +36,23 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Long> findTopFiveEmployeeIdsInPastMonth() {
+    public List<Task> findAllByAssigneeId(Long id) {
+        List<TaskEntity> allByAssigneeId = taskRepositoryJpa.findAllByAssigneeId(id);
 
-        return taskRepositoryJpa.findTopFiveEmployeeIdsInPastMonth();
+        return allByAssigneeId.stream()
+                .map(TaskEntity::toModel)
+                .toList();
+    }
+
+    @Override
+    public List<Task> findAllTasks() {
+        return taskRepositoryJpa.findAll().stream()
+                .map(TaskEntity::toModel)
+                .toList();
+    }
+
+    @Override
+    public void deleteByProjectId(Long projectId) {
+        taskRepositoryJpa.deleteByProjectId(projectId);
     }
 }

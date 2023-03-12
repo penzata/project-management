@@ -1,8 +1,11 @@
 package org.project.management.model.model;
 
+import org.project.management.model.message.Events;
+import org.project.management.model.message.MessagingBroker;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.Objects;
 
 public class Employee {
     private Long id;
@@ -12,6 +15,8 @@ public class Employee {
     private LocalDate dateOfBirth;
     private BigDecimal monthlySalary;
 
+    private Long projectId;
+
     private Employee() {
     }
 
@@ -20,13 +25,15 @@ public class Employee {
                      String email,
                      Long phoneNumber,
                      LocalDate dateOfBirth,
-                     BigDecimal monthlySalary) {
+                     BigDecimal monthlySalary,
+                     Long projectId) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
         this.monthlySalary = monthlySalary;
+        this.projectId = projectId;
     }
 
     public static Employee employee(Long id,
@@ -34,24 +41,33 @@ public class Employee {
                                     String email,
                                     Long phoneNumber,
                                     LocalDate dateOfBirth,
-                                    BigDecimal monthlySalary) {
-        return new Employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary);
+                                    BigDecimal monthlySalary,
+                                    Long projectId) {
+        return new Employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary, projectId);
     }
 
-    public Optional<Long> getId() {
-        return Optional.ofNullable(this.id);
+    public Long getId() {
+        return this.id;
     }
 
-    public Employee updateAttributes(Employee employee) {
+    public Employee updatePersonalInfo(Employee employee) {
         this.fullName = employee.getFullName();
         this.email = employee.getEmail();
         this.phoneNumber = employee.getPhoneNumber();
         this.dateOfBirth = employee.getDateOfBirth();
         this.monthlySalary = employee.getMonthlySalary();
 
-        return employee;
+        MessagingBroker.produceEvent(Events.INFO_UPDATED);
+        return this;
     }
 
+    public void assignToProject(Project project) {
+        this.projectId = project.getId();
+    }
+
+    public void unassignFromProject() {
+        this.projectId = null;
+    }
     public String getFullName() {
         return fullName;
     }
@@ -69,6 +85,47 @@ public class Employee {
     }
 
     public BigDecimal getMonthlySalary() {
+
         return monthlySalary;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", dateOfBirth=" + dateOfBirth +
+                ", monthlySalary=" + monthlySalary +
+                ", projectId=" + projectId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                fullName.equals(employee.fullName) &&
+                email.equals(employee.email) &&
+                phoneNumber.equals(employee.phoneNumber) &&
+                dateOfBirth.equals(employee.dateOfBirth) &&
+                Objects.equals(projectId, employee.getProjectId()) &&
+                monthlySalary.equals(employee.monthlySalary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, email, phoneNumber, dateOfBirth, monthlySalary);
     }
 }

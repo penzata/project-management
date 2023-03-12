@@ -39,18 +39,21 @@ public class EmployeeEntity {
     private LocalDate dateOfBirth;
     private BigDecimal monthlySalary;
 
+    private Long projectId;
+
     public static EmployeeEntity fromModel(Employee employee) {
         return EmployeeEntity.builder()
-                .id(employee.getId().orElse(null))
+                .id(employee.getId())
                 .fullName(employee.getFullName())
                 .email(employee.getEmail())
                 .phoneNumber(employee.getPhoneNumber())
                 .dateOfBirth(employee.getDateOfBirth())
                 .monthlySalary(employee.getMonthlySalary())
+                .projectId(employee.getProjectId())
                 .build();
     }
 
     public Employee toModel() {
-        return Employee.employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary);
+        return Employee.employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary, projectId);
     }
 }
