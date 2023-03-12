@@ -41,7 +41,7 @@ public class EmployeeEntity {
 
     public static EmployeeEntity fromModel(Employee employee) {
         return EmployeeEntity.builder()
-                .id(employee.getId().orElse(null))
+                .id(employee.getId())
                 .fullName(employee.getFullName())
                 .email(employee.getEmail())
                 .phoneNumber(employee.getPhoneNumber())

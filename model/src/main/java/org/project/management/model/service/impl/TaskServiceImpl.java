@@ -1,6 +1,5 @@
 package org.project.management.model.service.impl;
 
-import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
@@ -27,17 +26,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getTask(Long id) {
 
-        return foundById(id);
+        return findById(id);
     }
 
-    private Task foundById(Long id) {
-        return taskRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException(id.toString()));
+    private Task findById(Long id) {
+        return taskRepository.findById(id);
     }
 
     @Override
     public Task updateTask(Long id, Task task) {
-        Task taskToUpdate = foundById(id);
+        Task taskToUpdate = findById(id);
         Task updatedTask = taskToUpdate.updateParameters(task);
 
         return taskRepository.save(updatedTask);
@@ -45,31 +43,38 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Long id) {
-        foundById(id);
+        findById(id);
         taskRepository.deleteById(id);
     }
 
     @Override
-    public Task assignEmployee(Long taskId, Long assigneeId) {
-        Task task = foundById(taskId);
-        Employee employee = employeeService.getEmployee(assigneeId);
+    public Task assignEmployee(Long taskId, Long employeeId) {
+        Task task = findById(taskId);
+        Employee employee = employeeService.getEmployee(employeeId);
         task.assignTo(employee);
 
         return taskRepository.save(task);
     }
 
     @Override
-    public List<Long> getTopFiveEmployeeIdsInPastMonth() {
-        return taskRepository.findTopFiveEmployeeIdsInPastMonth();
+    public void unassignDeletedEmployee(Long employeeId) {
+        List<Task> allByAssigneeId = taskRepository.findAllByAssigneeId(employeeId);
+        allByAssigneeId
+                .forEach(task -> {
+                    task.unassignEmployee();
+                    taskRepository.save(task);
+                });
     }
 
     @Override
-    public void unassignEmployee(Long employeeId) {
-        List<Task> allByAssigneeId = taskRepository.findAllByAssigneeId(employeeId);
+    public Task unassignEmployee(Long id) {
+        Task task = taskRepository.findById(id);
+        task.unassignEmployee();
+        return taskRepository.save(task);
+    }
 
-        allByAssigneeId.stream()
-                .map(Task::unassignEmployee)
-                .map(taskRepository::save)
-                .close();
+    @Override
+    public List<Task> getAllTasks() {
+        return taskRepository.findAllTasks();
     }
 }

@@ -6,7 +6,6 @@ import org.project.management.model.message.MessagingBroker;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Employee {
     private Long id;
@@ -42,8 +41,8 @@ public class Employee {
         return new Employee(id, fullName, email, phoneNumber, dateOfBirth, monthlySalary);
     }
 
-    public Optional<Long> getId() {
-        return Optional.ofNullable(this.id);
+    public Long getId() {
+        return this.id;
     }
 
     public Employee updatePersonalInfo(Employee employee) {

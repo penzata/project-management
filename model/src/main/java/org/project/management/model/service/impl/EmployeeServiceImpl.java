@@ -1,8 +1,8 @@
 package org.project.management.model.service.impl;
 
 import org.project.management.model.exception.ExistingEmailException;
-import org.project.management.model.exception.IdNotFoundException;
 import org.project.management.model.model.Employee;
+import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
 import org.project.management.model.service.TaskService;
@@ -29,17 +29,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployee(Long id) {
 
-        return foundById(id);
+        return findById(id);
     }
 
-    private Employee foundById(Long id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException(id.toString()));
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAllEmployees();
+    }
+
+    private Employee findById(Long id) {
+        return employeeRepository.findById(id);
     }
 
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
-        Employee employeeToUpdate = foundById(id);
+        Employee employeeToUpdate = findById(id);
 
         Employee updatedEmployee = employeeToUpdate.updatePersonalInfo(employee);
         return employeeRepository.save(updatedEmployee);
@@ -47,20 +51,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
-        foundById(id);
-        taskService.unassignEmployee(id);
+        findById(id);
         employeeRepository.deleteById(id);
+        taskService.unassignDeletedEmployee(id);
     }
 
     @Override
-    public List<Employee> findByIds(List<Long> ids) {
-        return employeeRepository.findByIds(ids);
+    public List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum) {
+        return employeeRepository.getTopEmployees(maxNum);
     }
 
-    @Override
-    public List<Employee> getTopFiveEmployeesByCompletedTasksInPastMonth() {
-        //todo works for now, later change to user aggregation in the repository
-        List<Long> topFiveEmployeeIds = taskService.getTopFiveEmployeeIdsInPastMonth();
-        return employeeRepository.findByIds(topFiveEmployeeIds);
-    }
 }

@@ -34,17 +34,20 @@ public class TaskEntity {
     private Long assigneeId;
     private LocalDateTime dueDate;
 
+    private LocalDateTime completedDate;
+
     public static TaskEntity fromModel(Task task) {
         return TaskEntity.builder()
-                .id(task.getId().orElse(null))
+                .id(task.getId())
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .assigneeId(task.getAssigneeId().orElse(null))
                 .dueDate(task.getDueDate().orElse(null))
+                .completedDate(task.getCompletedDate().orElse(null))
                 .build();
     }
 
     public Task toModel() {
-        return Task.task(id, title, description, assigneeId, dueDate);
+        return Task.task(id, title, description, assigneeId, dueDate, completedDate);
     }
 }

@@ -9,7 +9,5 @@ import java.util.List;
 @Repository
 public interface TaskRepositoryJpa extends JpaRepository<TaskEntity, Long> {
 
-//    List<Long> findTopFiveEmployeeIdsInPastMonth();
-
     List<TaskEntity> findAllByAssigneeId(Long id);
 }

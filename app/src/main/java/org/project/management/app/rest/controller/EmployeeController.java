@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.project.management.app.exceptionhandler.Messages;
-import org.project.management.app.persistence.entity.EmployeeEntity;
 import org.project.management.app.rest.dto.CustomMessageDTO;
 import org.project.management.app.rest.dto.EmployeeDTO;
 import org.project.management.model.model.Employee;
+import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @Validated
@@ -28,21 +30,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+    @GetMapping()
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees().stream()
+                .map(EmployeeDTO::fromModel)
+                .toList();
+    }
+
+    @GetMapping("/top/{maxNum}")
+    public List<EmployeeWithCompletedTasks> getTopEmployees(@PathVariable String maxNum) {
+        return employeeService.getTopEmployees(maxNum);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public EmployeeDTO createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = employeeService.createEmployee(employeeDTO.toEntity().toModel());
+        Employee employee = employeeService.createEmployee(employeeDTO.toModel());
 
-        return EmployeeDTO.fromEntity(EmployeeEntity
-                .fromModel(employee));
+        return EmployeeDTO.fromModel(employee);
     }
 
     @GetMapping("/{id}")
     public EmployeeDTO getEmployee(@Min(1) @PathVariable Long id) {
         Employee employee = employeeService.getEmployee(id);
 
-        return EmployeeDTO.fromEntity(EmployeeEntity
-                .fromModel(employee));
+        return EmployeeDTO.fromModel(employee);
     }
 
     @DeleteMapping("/{id}")
@@ -56,8 +68,7 @@ public class EmployeeController {
     @PutMapping("/{id}")
     public EmployeeDTO updateEmployee(@Min(1) @PathVariable Long id,
                                       @Valid @RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = employeeService.updateEmployee(id, employeeDTO.toEntity().toModel());
-        return EmployeeDTO.fromEntity(EmployeeEntity
-                .fromModel(employee));
+        Employee employee = employeeService.updateEmployee(id, employeeDTO.toModel());
+        return EmployeeDTO.fromModel(employee);
     }
 }

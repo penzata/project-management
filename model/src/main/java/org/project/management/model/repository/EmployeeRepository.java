@@ -1,19 +1,21 @@
 package org.project.management.model.repository;
 
 import org.project.management.model.model.Employee;
+import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeRepository {
 
     Employee save(Employee employee);
 
-    Optional<Employee> findById(Long id);
+    Employee findById(Long id);
 
     void deleteById(Long id);
 
-    List<Employee> findByIds(List<Long> ids);
-
     boolean existsByEmail(String email);
+
+    List<Employee> findAllEmployees();
+
+    List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum);
 }
