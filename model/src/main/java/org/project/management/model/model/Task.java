@@ -1,6 +1,6 @@
 package org.project.management.model.model;
 
-import org.project.management.model.exception.AlreadyAssignedEmployeeException;
+import org.project.management.model.exception.TaskAlreadyAssignedException;
 import org.project.management.model.message.Events;
 import org.project.management.model.message.MessagingBroker;
 
@@ -39,16 +39,18 @@ public class Task {
     }
 
     public void assignTo(Employee employee) {
-        Optional<Long> employeeId = employee.getId();
-        if (employeeId.isPresent()) {
-            Long empId = employeeId.get();
-            if (Objects.equals(this.assigneeId, empId)) {
-                throw new AlreadyAssignedEmployeeException(empId.toString());
-            } else {
-                this.assigneeId = empId;
-            }
+        if(this.assigneeId != null) {
+            throw new TaskAlreadyAssignedException(employee.toString());
         }
+        Optional<Long> employeeId = employee.getId();
+        employeeId.ifPresent(eId -> this.assigneeId = eId);
+
         MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED);
+    }
+
+    public Task unassignEmployee() {
+        this.assigneeId = null;
+        return this;
     }
 
     public Optional<Long> getId() {

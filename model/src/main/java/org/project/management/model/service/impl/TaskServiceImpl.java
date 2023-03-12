@@ -62,4 +62,14 @@ public class TaskServiceImpl implements TaskService {
     public List<Long> getTopFiveEmployeeIdsInPastMonth() {
         return taskRepository.findTopFiveEmployeeIdsInPastMonth();
     }
+
+    @Override
+    public void unassignEmployee(Long employeeId) {
+        List<Task> allByAssigneeId = taskRepository.findAllByAssigneeId(employeeId);
+
+        allByAssigneeId.stream()
+                .map(Task::unassignEmployee)
+                .map(taskRepository::save)
+                .close();
+    }
 }

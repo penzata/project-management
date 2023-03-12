@@ -9,6 +9,7 @@ import org.project.management.app.rest.dto.CustomMessageDTO;
 import org.project.management.app.rest.dto.ViolationDTO;
 import org.project.management.model.exception.BusinessException;
 import org.project.management.model.exception.ExistingEmailException;
+import org.project.management.model.exception.TaskAlreadyAssignedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -85,13 +86,13 @@ public class GlobalExceptionHandlerAdvice {
                         .build());
     }
 
-    @ExceptionHandler(ExistingEmailException.class)
+    @ExceptionHandler({ExistingEmailException.class, TaskAlreadyAssignedException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<CustomMessageDTO> handleExistingEmailException(ExistingEmailException ex) {
+    public ResponseEntity<CustomMessageDTO> conflictException(BusinessException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(409)
                 .body(CustomMessageDTO.builder()
-                        .message(Messages.EXISTING_EMAIL)
+                        .message(ex.getClass().getSimpleName() + " - " + ex.getMessage())
                         .build());
     }
 

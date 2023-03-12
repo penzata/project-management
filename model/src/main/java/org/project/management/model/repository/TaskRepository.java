@@ -14,4 +14,6 @@ public interface TaskRepository {
     void deleteById(Long id);
 
     List<Long> findTopFiveEmployeeIdsInPastMonth();
+
+    List<Task> findAllByAssigneeId(Long id);
 }

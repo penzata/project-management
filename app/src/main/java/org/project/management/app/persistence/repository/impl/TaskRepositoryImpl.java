@@ -42,4 +42,13 @@ public class TaskRepositoryImpl implements TaskRepository {
 //        return taskRepositoryJpa.findTopFiveEmployeeIdsInPastMonth();
         return null;
     }
+
+    @Override
+    public List<Task> findAllByAssigneeId(Long id) {
+        List<TaskEntity> allByAssigneeId = taskRepositoryJpa.findAllByAssigneeId(id);
+
+        return allByAssigneeId.stream()
+                .map(TaskEntity::toModel)
+                .toList();
+    }
 }

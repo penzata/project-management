@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee createEmployee(Employee employee) {
         if (employeeRepository.existsByEmail(employee.getEmail())) {
-            throw new ExistingEmailException();
+            throw new ExistingEmailException(employee.getEmail());
         }
         return employeeRepository.save(employee);
     }
@@ -48,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Long id) {
         foundById(id);
+        taskService.unassignEmployee(id);
         employeeRepository.deleteById(id);
     }
 
