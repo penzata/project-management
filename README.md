@@ -10,16 +10,16 @@ The structure of the project is a multi-module with Maven:
 
 The three main models are: Employee, Task and Project.
 
-#### API's entry points:
-### Employee controller: 8 endpoints
+### API's entry points:
+#### Employee controller: 8 endpoints
 4 CRUD endpoints, list all employees,
 get top(5) employees by completed tasks in the last month, assign to project and unassign from project.
 
-### Task controller: 8 endpoints
+#### Task controller: 8 endpoints
 4 CRUD endpoints, list all tasks, 
 find all tasks that are completed after their due date, assign employee and unassign from employee.
 
-### Project controller: 5 endpoints
+#### Project controller: 5 endpoints
 4 CRUD endpoints and list all projects.
 
 If an employee is deleted it is unassigned from all tasks.
