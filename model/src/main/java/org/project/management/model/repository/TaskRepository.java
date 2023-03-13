@@ -17,4 +17,6 @@ public interface TaskRepository {
     List<Task> findAllTasks();
 
     void deleteByProjectId(Long projectId);
+
+    List<Task> findAllOverdueTasks();
 }

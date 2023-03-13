@@ -32,7 +32,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping()
-    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false, name = "projectId") String projectId) {
+    public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees().stream()
                 .map(EmployeeDTO::fromModel)
                 .toList();

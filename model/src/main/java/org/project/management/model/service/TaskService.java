@@ -23,4 +23,6 @@ public interface TaskService {
     List<Task> getAllTasks();
 
     void deleteByProjectId(Long projectId);
+
+    List<Task> getAllOverdueTasks();
 }

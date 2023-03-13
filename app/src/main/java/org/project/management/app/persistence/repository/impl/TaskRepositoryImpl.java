@@ -55,4 +55,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     public void deleteByProjectId(Long projectId) {
         taskRepositoryJpa.deleteByProjectId(projectId);
     }
+
+    @Override
+    public List<Task> findAllOverdueTasks() {
+        return taskRepositoryJpa.findAllByCompletedDateAfterDueDate().stream()
+                .map(TaskEntity::toModel)
+                .toList();
+    }
 }

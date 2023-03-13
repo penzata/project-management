@@ -80,4 +80,9 @@ public class TaskServiceImpl implements TaskService {
     public void deleteByProjectId(Long projectId) {
         taskRepository.deleteByProjectId(projectId);
     }
+
+    @Override
+    public List<Task> getAllOverdueTasks() {
+        return taskRepository.findAllOverdueTasks();
+    }
 }
