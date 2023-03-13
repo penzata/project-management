@@ -1,5 +1,7 @@
 package org.project.management.model.service.impl;
 
+import org.project.management.model.exception.CompletedDateBeforeDueDateException;
+import org.project.management.model.exception.ExpiredDueDateException;
 import org.project.management.model.model.Employee;
 import org.project.management.model.model.Task;
 import org.project.management.model.repository.TaskRepository;
@@ -7,7 +9,9 @@ import org.project.management.model.service.EmployeeService;
 import org.project.management.model.service.ProjectService;
 import org.project.management.model.service.TaskService;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class TaskServiceImpl implements TaskService {
     private final EmployeeService employeeService;
@@ -22,8 +26,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(Task task) {
+        correctDateTimeCheck(task);
         projectService.getProjectOrThrow(task.getProjectId());
         return taskRepository.save(task);
+    }
+
+    private static void correctDateTimeCheck(Task task) {
+        Optional<LocalDateTime> dueDate = task.getDueDate();
+        Optional<LocalDateTime> completedDate = task.getCompletedDate();
+        if (dueDate.isPresent() && dueDate.get().isBefore(LocalDateTime.now())) {
+            throw new ExpiredDueDateException(dueDate.get().toString());
+        }
+        if (dueDate.isPresent() && completedDate.isPresent() && completedDate.get().isBefore(dueDate.get())) {
+            throw new CompletedDateBeforeDueDateException(completedDate.get() + " : " + dueDate.get());
+        }
     }
 
     @Override
@@ -35,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task updateTask(Long id, Task task) {
         Task taskToUpdate = taskRepository.findById(id);
+        correctDateTimeCheck(task);
         Task updatedTask = taskToUpdate.updateParameters(task);
 
         return taskRepository.save(updatedTask);
