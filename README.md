@@ -12,12 +12,12 @@ The three main models are: Employee, Task and Project.
 
 #### API's entry points:
 ### Employee controller: 8 endpoints
-4 CRUD endpoints, list all employees(with optional listing parameter by project ID),
+4 CRUD endpoints, list all employees,
 get top(5) employees by completed tasks in the last month, assign to project and unassign from project.
 
-### Task controller: 7 endpoints
-4 CRUD endpoints, list all tasks(with optional listing parameters by project ID or(and) employee ID),
-assign employee and unassign from employee.
+### Task controller: 8 endpoints
+4 CRUD endpoints, list all tasks, 
+find all tasks that are completed after their due date, assign employee and unassign from employee.
 
 ### Project controller: 5 endpoints
 4 CRUD endpoints and list all projects.
