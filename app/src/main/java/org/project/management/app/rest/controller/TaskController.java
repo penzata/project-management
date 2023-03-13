@@ -30,10 +30,16 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
 
-    @GetMapping(params = {"employeeId", "projectId"})
-    public List<TaskDTO> getAllTasks(@RequestParam(required = false, name = "employeeId") String employeeId,
-                                     @RequestParam(required = false, name = "projectId") String projectId) {
+    @GetMapping()
+    public List<TaskDTO> getAllTasks() {
         return taskService.getAllTasks().stream()
+                .map(TaskDTO::fromModel)
+                .toList();
+    }
+
+    @GetMapping("/overdue")
+    public List<TaskDTO> getAllOverdueTasks() {
+        return taskService.getAllOverdueTasks().stream()
                 .map(TaskDTO::fromModel)
                 .toList();
     }
