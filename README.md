@@ -28,7 +28,8 @@ If a project is deleted, all tasks from that project are deleted too and the emp
 The API uses Java record classes (for serialization and deserialization) 
 with Jakarta and Jackson annotations for validations.
 There are several validations in the business layer: for unique email, for creating tasks 
-(cannot create tasks if project doesn't exist) and individual task can be assigned only to one employee.
+(cannot create tasks if project doesn't exist), individual task can be assigned only to one employee, 
+due date cannot be before current date-time and completed date cannot be before due date.
 
 API uses embedded H2 database and the DB's persistence is done through Spring Data JPA.
 
