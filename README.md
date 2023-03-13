@@ -1,7 +1,7 @@
 # **RESTfull web service for Project Management**
 
-The Project Management API represents a kanban board to manage work at an organizational level. It consists of projects, divided by tasks,
-both of which can be assigned to an employee(s).
+The Project Management API represents a kanban board to manage work at an organizational level. It consists of projects, 
+divided by tasks, both of which can be assigned to an employee(s).
 
 The API is created with Spring Boot using hexagonal architecture style that implements the Domain-Driven-Design. 
 The structure of the project is a multi-module with Maven:
@@ -20,7 +20,7 @@ get top(5) employees by completed tasks in the last month, assign to project and
 assign employee and unassign from employee.
 
 ### Project controller: 5 endpoints
-4 CRUD endpoints & list all projects.
+4 CRUD endpoints and list all projects.
 
 If an employee is deleted it is unassigned from all tasks.
 If a project is deleted, all tasks from that project are deleted too and the employees are unassigned from it.
