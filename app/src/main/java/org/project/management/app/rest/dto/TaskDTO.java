@@ -14,13 +14,11 @@ public record TaskDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
                       Long id,
                       @NotBlank
                       String title,
-                      @NotBlank
                       String description,
                       @JsonProperty(access = JsonProperty.Access.READ_ONLY)
                       Long assigneeId,
                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
                       LocalDateTime dueDate,
-
                       @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
                       LocalDateTime completedDate,
                       @NotNull

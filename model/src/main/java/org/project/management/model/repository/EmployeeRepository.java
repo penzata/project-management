@@ -1,7 +1,7 @@
 package org.project.management.model.repository;
 
-import org.project.management.model.model.Employee;
 import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
+import org.project.management.model.model.Employee;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface EmployeeRepository {
 
     List<Employee> findAllEmployees();
 
-    List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum);
+    List<EmployeeWithCompletedTasks> getTopEmployees(Integer maxNum);
 
-    List<Employee> findByProjectId(Long projectId);
+    List<Employee> findAllByProjectId(Long projectId);
 }

@@ -1,8 +1,8 @@
 package org.project.management.model.service.impl;
 
+import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.exception.ExistingEmailException;
 import org.project.management.model.model.Employee;
-import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
 import org.project.management.model.model.Project;
 import org.project.management.model.repository.EmployeeRepository;
 import org.project.management.model.service.EmployeeService;
@@ -13,11 +13,12 @@ import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
     private final TaskService taskService;
-
     private final ProjectService projectService;
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(TaskService taskService, ProjectService projectService, EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(TaskService taskService,
+                               ProjectService projectService,
+                               EmployeeRepository employeeRepository) {
         this.taskService = taskService;
         this.projectService = projectService;
         this.employeeRepository = employeeRepository;
@@ -34,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployee(Long id) {
 
-        return findById(id);
+        return employeeRepository.findById(id);
     }
 
     @Override
@@ -42,13 +43,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAllEmployees();
     }
 
-    private Employee findById(Long id) {
-        return employeeRepository.findById(id);
-    }
-
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
-        Employee employeeToUpdate = findById(id);
+        Employee employeeToUpdate = employeeRepository.findById(id);
 
         Employee updatedEmployee = employeeToUpdate.updatePersonalInfo(employee);
         return employeeRepository.save(updatedEmployee);
@@ -56,19 +53,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
-        findById(id);
+        employeeRepository.findById(id);
         employeeRepository.deleteById(id);
         taskService.unassignAllFromEmployee(id);
     }
 
     @Override
-    public List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum) {
+    public Employee unassignFromProject(Long id) {
+        Employee employee = employeeRepository.findById(id);
+        employee.unassignFromProject();
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public List<EmployeeWithCompletedTasks> getTopEmployees(Integer maxNum) {
         return employeeRepository.getTopEmployees(maxNum);
     }
 
     @Override
     public void unassignAllFromProject(Long projectId) {
-        employeeRepository.findByProjectId(projectId)
+        employeeRepository.findAllByProjectId(projectId)
                 .forEach(emp -> {
                     emp.unassignFromProject();
                     employeeRepository.save(emp);
@@ -84,13 +89,4 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeRepository.save(employee);
     }
-
-    @Override
-    public Employee unassignFromProject(Long id) {
-        Employee employee = employeeRepository.findById(id);
-        employee.unassignFromProject();
-
-        return employeeRepository.save(employee);
-    }
-
 }

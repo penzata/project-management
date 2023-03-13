@@ -14,9 +14,7 @@ public class Task {
     private String description;
     private Long assigneeId;
     private LocalDateTime dueDate;
-
     private LocalDateTime completedDate;
-
     private Long projectId;
 
     private Task() {
@@ -49,21 +47,22 @@ public class Task {
     }
 
     public void assignTo(Employee employee) {
-        if(this.assigneeId != null) {
+        if (this.assigneeId != null) {
             throw new TaskAlreadyAssignedException(employee.toString());
         }
         this.assigneeId = employee.getId();
 
-        MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED);
+        MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED_TASK);
     }
 
     public void unassignFromEmployee() {
         this.assigneeId = null;
-        MessagingBroker.produceEvent(Events.EMPLOYEE_UNASSIGNED);
+
+        MessagingBroker.produceEvent(Events.EMPLOYEE_UNASSIGNED_TASK);
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public Optional<Long> getAssigneeId() {
@@ -74,11 +73,10 @@ public class Task {
     public Task updateParameters(Task task) {
         this.title = task.getTitle();
         this.description = task.getDescription();
-
         this.dueDate = task.getDueDate().orElse(null);
         this.completedDate = task.getCompletedDate().orElse(null);
 
-        MessagingBroker.produceEvent(Events.PARAMS_UPDATED);
+        MessagingBroker.produceEvent(Events.TASK_UPDATED);
         return this;
     }
 
@@ -96,6 +94,7 @@ public class Task {
     }
 
     public Optional<LocalDateTime> getCompletedDate() {
+
         return Optional.ofNullable(completedDate);
     }
 
@@ -126,14 +125,15 @@ public class Task {
         Task task = (Task) o;
         return Objects.equals(id, task.id) &&
                 title.equals(task.title) &&
-                description.equals(task.description) &&
+                Objects.equals(description, task.description) &&
                 Objects.equals(assigneeId, task.assigneeId) &&
-                Objects.equals(projectId, task.projectId) &&
-                dueDate.equals(task.dueDate);
+                Objects.equals(dueDate, task.dueDate) &&
+                Objects.equals(completedDate, task.completedDate) &&
+                projectId.equals(task.projectId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, dueDate, projectId);
+        return Objects.hash(title, description, dueDate, completedDate, projectId);
     }
 }

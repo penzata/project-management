@@ -12,6 +12,5 @@ public interface ProjectRepository {
 
     void deleteById(Long id);
 
-    List<Project> findAll();
-
+    List<Project> findAllProjects();
 }

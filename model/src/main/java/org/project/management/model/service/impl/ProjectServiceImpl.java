@@ -9,7 +9,6 @@ import org.project.management.model.service.TaskService;
 import java.util.List;
 
 public class ProjectServiceImpl implements ProjectService {
-
     private final ProjectRepository projectRepository;
     private final TaskService taskService;
     private final EmployeeService employeeService;
@@ -32,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+        return projectRepository.findAllProjects();
     }
 
     @Override
@@ -49,5 +48,4 @@ public class ProjectServiceImpl implements ProjectService {
         taskService.deleteByProjectId(id);
         employeeService.unassignAllFromProject(id);
     }
-
 }

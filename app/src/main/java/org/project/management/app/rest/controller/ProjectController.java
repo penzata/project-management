@@ -30,7 +30,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping()
-    public List<ProjectDTO> getAllEmployees() {
+    public List<ProjectDTO> getAllProjects() {
         return projectService.getAllProjects().stream()
                 .map(ProjectDTO::fromModel)
                 .toList();
@@ -40,14 +40,12 @@ public class ProjectController {
     @PostMapping
     public ProjectDTO createProject(@Valid @RequestBody ProjectDTO projectDTO) {
         Project project = projectService.createProject(projectDTO.toModel());
-
         return ProjectDTO.fromModel(project);
     }
 
     @GetMapping("/{id}")
     public ProjectDTO getProject(@Min(1) @PathVariable Long id) {
         Project project = projectService.getProjectOrThrow(id);
-
         return ProjectDTO.fromModel(project);
     }
 

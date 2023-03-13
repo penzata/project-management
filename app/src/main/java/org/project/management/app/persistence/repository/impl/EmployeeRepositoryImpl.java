@@ -20,9 +20,7 @@ import java.util.Map;
 @Repository
 @AllArgsConstructor
 public class EmployeeRepositoryImpl implements EmployeeRepository {
-
     private final EmployeeRepositoryJpa employeeRepositoryJpa;
-
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
@@ -58,7 +56,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public List<EmployeeWithCompletedTasks> getTopEmployees(String maxNum) {
+    public List<EmployeeWithCompletedTasks> getTopEmployees(Integer maxNum) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValues(Map.of(
                 "startDate", LocalDateTime.now().minusMonths(1),
@@ -76,15 +74,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 params, (rs, rowNum) -> this.mapRow(rs));
     }
 
-    @Override
-    public List<Employee> findByProjectId(Long projectId) {
-        return employeeRepositoryJpa.findAllByProjectId(projectId);
-    }
-
     public EmployeeWithCompletedTasks mapRow(ResultSet rs) throws SQLException {
         return new EmployeeWithCompletedTasks(rs.getLong("id"),
                 rs.getString("full_name"),
                 rs.getString("email"),
                 rs.getInt("completed_tasks"));
+    }
+
+    @Override
+    public List<Employee> findAllByProjectId(Long projectId) {
+        return employeeRepositoryJpa.findAllByProjectId(projectId);
     }
 }

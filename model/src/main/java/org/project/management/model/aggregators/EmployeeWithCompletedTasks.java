@@ -6,13 +6,12 @@ public class EmployeeWithCompletedTasks {
     private Long id;
     private String fullName;
     private String email;
-
     private int completedTasks;
 
     public EmployeeWithCompletedTasks(Long id,
-                                       String fullName,
-                                       String email,
-                                       int completedTasks) {
+                                      String fullName,
+                                      String email,
+                                      int completedTasks) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -22,7 +21,6 @@ public class EmployeeWithCompletedTasks {
     public Long getId() {
         return this.id;
     }
-
 
     public String getFullName() {
         return fullName;
