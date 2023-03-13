@@ -7,11 +7,10 @@ import org.project.management.model.model.Project;
 
 @Builder
 public record ProjectDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-                          Long id,
+                         Long id,
                          @NotBlank
-                          String name,
-
-                          String description) {
+                         String name,
+                         String description) {
 
     public static ProjectDTO fromModel(Project project) {
         return ProjectDTO.builder()

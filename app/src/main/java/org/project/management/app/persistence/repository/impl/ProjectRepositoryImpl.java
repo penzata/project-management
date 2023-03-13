@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 @AllArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepository {
-
     private final ProjectRepositoryJpa projectRepositoryJpa;
 
     @Override
@@ -36,7 +35,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Project> findAll() {
+    public List<Project> findAllProjects() {
 
         return projectRepositoryJpa.findAll().stream()
                 .map(ProjectEntity::toModel)

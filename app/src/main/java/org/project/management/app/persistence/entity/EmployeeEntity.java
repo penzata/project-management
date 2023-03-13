@@ -38,7 +38,6 @@ public class EmployeeEntity {
     private Long phoneNumber;
     private LocalDate dateOfBirth;
     private BigDecimal monthlySalary;
-
     private Long projectId;
 
     public static EmployeeEntity fromModel(Employee employee) {

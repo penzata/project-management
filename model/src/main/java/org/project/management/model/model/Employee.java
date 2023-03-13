@@ -14,7 +14,6 @@ public class Employee {
     private Long phoneNumber;
     private LocalDate dateOfBirth;
     private BigDecimal monthlySalary;
-
     private Long projectId;
 
     private Employee() {
@@ -57,17 +56,10 @@ public class Employee {
         this.dateOfBirth = employee.getDateOfBirth();
         this.monthlySalary = employee.getMonthlySalary();
 
-        MessagingBroker.produceEvent(Events.INFO_UPDATED);
+        MessagingBroker.produceEvent(Events.EMPLOYEE_UPDATED);
         return this;
     }
 
-    public void assignToProject(Project project) {
-        this.projectId = project.getId();
-    }
-
-    public void unassignFromProject() {
-        this.projectId = null;
-    }
     public String getFullName() {
         return fullName;
     }
@@ -87,6 +79,18 @@ public class Employee {
     public BigDecimal getMonthlySalary() {
 
         return monthlySalary;
+    }
+
+    public void assignToProject(Project project) {
+        this.projectId = project.getId();
+
+        MessagingBroker.produceEvent(Events.EMPLOYEE_ASSIGNED_PROJECT);
+    }
+
+    public void unassignFromProject() {
+        this.projectId = null;
+
+        MessagingBroker.produceEvent(Events.EMPLOYEE_UNASSIGNED_PROJECT);
     }
 
     public Long getProjectId() {
@@ -119,9 +123,9 @@ public class Employee {
                 fullName.equals(employee.fullName) &&
                 email.equals(employee.email) &&
                 phoneNumber.equals(employee.phoneNumber) &&
-                dateOfBirth.equals(employee.dateOfBirth) &&
-                Objects.equals(projectId, employee.getProjectId()) &&
-                monthlySalary.equals(employee.monthlySalary);
+                Objects.equals(dateOfBirth, employee.dateOfBirth) &&
+                monthlySalary.equals(employee.monthlySalary) &&
+                Objects.equals(projectId, employee.projectId);
     }
 
     @Override

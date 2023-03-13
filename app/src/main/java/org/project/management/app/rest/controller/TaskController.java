@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,9 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
 
-    @GetMapping()
-    public List<TaskDTO> getAllTasks() {
-        //todo add employeeId param
+    @GetMapping(params = {"employeeId", "projectId"})
+    public List<TaskDTO> getAllTasks(@RequestParam(required = false, name = "employeeId") String employeeId,
+                                     @RequestParam(required = false, name = "projectId") String projectId) {
         return taskService.getAllTasks().stream()
                 .map(TaskDTO::fromModel)
                 .toList();
@@ -41,14 +42,12 @@ public class TaskController {
     @PostMapping
     public TaskDTO createTask(@Valid @RequestBody TaskDTO taskDTO) {
         Task task = taskService.createTask(taskDTO.toModel());
-
         return TaskDTO.fromModel(task);
     }
 
     @GetMapping("/{id}")
     public TaskDTO getTask(@Min(1) @PathVariable Long id) {
         Task task = taskService.getTask(id);
-
         return TaskDTO.fromModel(task);
     }
 

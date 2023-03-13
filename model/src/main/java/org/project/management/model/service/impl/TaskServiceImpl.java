@@ -11,7 +11,6 @@ import java.util.List;
 
 public class TaskServiceImpl implements TaskService {
     private final EmployeeService employeeService;
-
     private final ProjectService projectService;
     private final TaskRepository taskRepository;
 
@@ -58,8 +57,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void unassignAllFromEmployee(Long employeeId) {
-        List<Task> allByAssigneeId = taskRepository.findAllByAssigneeId(employeeId);
-        allByAssigneeId
+        taskRepository.findAllByAssigneeId(employeeId)
                 .forEach(task -> {
                     task.unassignFromEmployee();
                     taskRepository.save(task);

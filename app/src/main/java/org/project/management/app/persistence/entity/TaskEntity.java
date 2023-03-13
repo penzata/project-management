@@ -33,9 +33,7 @@ public class TaskEntity {
     private String description;
     private Long assigneeId;
     private LocalDateTime dueDate;
-
     private LocalDateTime completedDate;
-
     private Long projectId;
 
     public static TaskEntity fromModel(Task task) {

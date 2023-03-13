@@ -17,17 +17,23 @@ import org.springframework.context.annotation.Lazy;
 public class ModelBeanConfig {
 
     @Bean
-    EmployeeService employeeService(@Lazy TaskService taskService, EmployeeRepository employeeRepository, @Lazy ProjectService projectService) {
+    EmployeeService employeeService(@Lazy TaskService taskService,
+                                    @Lazy ProjectService projectService,
+                                    EmployeeRepository employeeRepository) {
         return new EmployeeServiceImpl(taskService, projectService, employeeRepository);
     }
 
     @Bean
-    TaskService taskService(@Lazy EmployeeService employeeService, TaskRepository taskRepository, @Lazy ProjectService projectService) {
+    TaskService taskService(@Lazy EmployeeService employeeService,
+                            @Lazy ProjectService projectService,
+                            TaskRepository taskRepository) {
         return new TaskServiceImpl(employeeService, projectService, taskRepository);
     }
 
     @Bean
-    ProjectService projectService(ProjectRepository projectRepository, TaskService taskService, @Lazy EmployeeService employeeService) {
+    ProjectService projectService(@Lazy EmployeeService employeeService,
+                                  @Lazy TaskService taskService,
+                                  ProjectRepository projectRepository) {
         return new ProjectServiceImpl(projectRepository, taskService, employeeService);
     }
 }

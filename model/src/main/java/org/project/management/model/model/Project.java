@@ -3,8 +3,6 @@ package org.project.management.model.model;
 import org.project.management.model.message.Events;
 import org.project.management.model.message.MessagingBroker;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Project {
@@ -24,20 +22,20 @@ public class Project {
     }
 
     public static Project project(Long id,
-                                   String name,
-                                   String description) {
+                                  String name,
+                                  String description) {
         return new Project(id, name, description);
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public Project updateProjectInfo(Project employee) {
         this.name = employee.getName();
         this.description = employee.getDescription();
 
-        MessagingBroker.produceEvent(Events.INFO_UPDATED);
+        MessagingBroker.produceEvent(Events.PROJECT_UPDATED);
         return this;
     }
 
@@ -50,6 +48,15 @@ public class Project {
     }
 
     @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -58,20 +65,13 @@ public class Project {
             return false;
         }
         Project project = (Project) o;
-        return Objects.equals(id, project.id) && Objects.equals(name, project.name) && Objects.equals(description, project.description);
+        return Objects.equals(id, project.id) &&
+                name.equals(project.name) &&
+                Objects.equals(description, project.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description);
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return Objects.hash(name);
     }
 }

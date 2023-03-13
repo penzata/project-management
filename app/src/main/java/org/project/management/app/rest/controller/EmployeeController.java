@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import org.project.management.app.exceptionhandler.Messages;
 import org.project.management.app.rest.dto.CustomMessageDTO;
 import org.project.management.app.rest.dto.EmployeeDTO;
-import org.project.management.model.model.Employee;
 import org.project.management.model.aggregators.EmployeeWithCompletedTasks;
+import org.project.management.model.model.Employee;
 import org.project.management.model.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,14 +32,14 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping()
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false, name = "projectId") String projectId) {
         return employeeService.getAllEmployees().stream()
                 .map(EmployeeDTO::fromModel)
                 .toList();
     }
 
     @GetMapping("/top/{maxNum}")
-    public List<EmployeeWithCompletedTasks> getTopEmployees(@PathVariable String maxNum) {
+    public List<EmployeeWithCompletedTasks> getTopEmployees(@Min(1) @PathVariable Integer maxNum) {
         return employeeService.getTopEmployees(maxNum);
     }
 
@@ -46,14 +47,12 @@ public class EmployeeController {
     @PostMapping
     public EmployeeDTO createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         Employee employee = employeeService.createEmployee(employeeDTO.toModel());
-
         return EmployeeDTO.fromModel(employee);
     }
 
     @GetMapping("/{id}")
     public EmployeeDTO getEmployee(@Min(1) @PathVariable Long id) {
         Employee employee = employeeService.getEmployee(id);
-
         return EmployeeDTO.fromModel(employee);
     }
 
@@ -74,7 +73,7 @@ public class EmployeeController {
 
     @PutMapping(value = "/{id}/project/{projectId}")
     public EmployeeDTO assignToProject(@Min(1) @PathVariable Long id,
-                                  @PathVariable(name = "projectId") Long projectId) {
+                                       @PathVariable(name = "projectId") Long projectId) {
         Employee employee = employeeService.assignToProject(id, projectId);
         return EmployeeDTO.fromModel(employee);
     }
